@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Brew_Stash.RestClient;
 using System.Collections.ObjectModel;
+using Xamarin.Forms;
+using Android.Content;
 
 namespace Brew_Stash
 {
@@ -29,6 +31,7 @@ namespace Brew_Stash
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
+            Forms.Init(this, savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.activity_main);
 
@@ -38,6 +41,7 @@ namespace Brew_Stash
 
             MapFragment mapFragment = (MapFragment)FragmentManager.FindFragmentById(Resource.Id.map);
             mapFragment.GetMapAsync(this);
+            
         }
 
 
@@ -67,7 +71,6 @@ namespace Brew_Stash
             MarkerOptions markerOpt1 = new MarkerOptions();
             markerOpt1.SetPosition(new LatLng(lat, lon));
             markerOpt1.SetTitle("My Position");
-
             map.AddMarker(markerOpt1);
 
             var result = await NearByPlaceSearch(nearbyQuery, lat.ToString().Replace(",","."), lon.ToString().Replace(",","."), radius, typeSearch, typeSearch, "");
@@ -81,7 +84,7 @@ namespace Brew_Stash
                 }
                 System.Diagnostics.Debug.WriteLine("Total result: " + listData.Count);
             }
-
+            map.InfoWindowClick += MapOnInfoWindowClick;
 
             AddLocationMarkers(map, listData);
         }
@@ -135,6 +138,15 @@ namespace Brew_Stash
             }
         }
 
+        private async void MapOnInfoWindowClick(object sender, GoogleMap.InfoWindowClickEventArgs e)
+        {
+            Marker myMarker = e.Marker;
+            // Do something with marker.
+            Console.WriteLine("Marker Clicked");
+
+            var intent = new Intent(this, typeof(CoffeeList));
+            this.StartActivity(intent);
+        }
     }
 }
 
