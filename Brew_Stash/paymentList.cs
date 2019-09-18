@@ -17,7 +17,7 @@ using static Android.Widget.AdapterView;
 
 namespace Brew_Stash
 {
-    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = false)]
+    [Activity(Label = "Enter Credit Card Details", Theme = "@style/AppTheme.NoActionBar", MainLauncher = false)]
     public class PaymentList : AppCompatActivity    {
 
        
@@ -30,7 +30,9 @@ namespace Brew_Stash
             Android.Widget.Button button = FindViewById<Android.Widget.Button>(Resource.Id.button10);
 
             button.Click += delegate {
-                
+                MainActivity.Database.SaveOrderAsync(MainActivity.finalOrder);
+                var note = MainActivity.Database.GetOrderAsync(0);
+                Console.WriteLine(MainActivity.finalOrder.ToString());
             };
       
         }

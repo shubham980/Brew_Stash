@@ -17,7 +17,7 @@ using static Android.Widget.AdapterView;
 
 namespace Brew_Stash
 {
-    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = false)]
+    [Activity(Label = "Choose Coffee Type", Theme = "@style/AppTheme.NoActionBar", MainLauncher = false)]
     public class CoffeeList : AppCompatActivity    {
 
         List<Coffee> coffeeItems = new List<Coffee>();
@@ -94,7 +94,7 @@ namespace Brew_Stash
             listView.ItemClick += (object sender, ItemClickEventArgs e) =>
             {
                 var selectedFromList = listView.GetItemAtPosition(e.Position);
-                Console.WriteLine("Item clicked " + coffeeItems[e.Position].Name);
+                MainActivity.finalOrder.CoffeeType = coffeeItems[e.Position].Name;
                 var intent = new Intent(this, typeof(CupsList));
                 this.StartActivity(intent);
             };

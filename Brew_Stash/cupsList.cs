@@ -17,7 +17,7 @@ using static Android.Widget.AdapterView;
 
 namespace Brew_Stash
 {
-    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = false)]
+    [Activity(Label = "Choose Cup Size", Theme = "@style/AppTheme.NoActionBar", MainLauncher = false)]
     public class CupsList : AppCompatActivity    {
 
         List<Cup> cupItems = new List<Cup>();
@@ -28,8 +28,6 @@ namespace Brew_Stash
         {
             base.OnCreate(bundle);
 
-
-            // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.myListView);
             listView = FindViewById<Android.Widget.ListView>(Resource.Id.listView1);
 
@@ -56,6 +54,7 @@ namespace Brew_Stash
             {
                 var selectedFromList = listView.GetItemAtPosition(e.Position);
                 Console.WriteLine("Item clicked " + cupItems[e.Position].Size);
+                MainActivity.finalOrder.CupSize = cupItems[e.Position].Size;
                 var intent = new Intent(this, typeof(ServicesList));
                 this.StartActivity(intent);
             };

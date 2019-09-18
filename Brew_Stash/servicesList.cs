@@ -17,7 +17,7 @@ using static Android.Widget.AdapterView;
 
 namespace Brew_Stash
 {
-    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = false)]
+    [Activity(Label = "Choose Additional Services", Theme = "@style/AppTheme.NoActionBar", MainLauncher = false)]
     public class ServicesList : AppCompatActivity    {
 
        
@@ -77,8 +77,33 @@ namespace Brew_Stash
 
         private void spinner_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
-            Spinner spinner = (Spinner)sender;   
-            
+            Spinner spinner = (Spinner)sender;
+            UpdateOrder(e.Position, spinner.Id);
+        }
+
+        private void UpdateOrder(int count, int id)
+        {
+            switch (id)
+            {
+                case (Resource.Id.spinner1):
+                    MainActivity.finalOrder.SugarCount = count;
+                    break;
+                case (Resource.Id.spinner2):
+                    MainActivity.finalOrder.FullCreamMilkCount = count;
+                    break;
+                case (Resource.Id.spinner3):
+                    MainActivity.finalOrder.SkimMilkCount = count;
+                    break;
+                case (Resource.Id.spinner4):
+                    MainActivity.finalOrder.WhipCreamCount = count;
+                    break;
+                case (Resource.Id.spinner5):
+                    MainActivity.finalOrder.IceCreamCount = count;
+                    break;
+                case (Resource.Id.spinner6):
+                    MainActivity.finalOrder.MarshmallowCount = count;
+                    break;
+            }
         }
 
 

@@ -11,10 +11,11 @@ using Brew_Stash.RestClient;
 using System.Collections.ObjectModel;
 using Xamarin.Forms;
 using Android.Content;
+using System.IO;
 
 namespace Brew_Stash
 {
-    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
+    [Activity(Label = "Choose Cafe", Theme = "@style/MyTheme.Splash", MainLauncher = true)]
     public class MainActivity : AppCompatActivity, IOnMapReadyCallback
     {
         private static readonly string PlaceAPIkey = "AIzaSyChmYLvTZu0eb6iCj2JZ4gRkqlyNXnuTkw";
@@ -27,6 +28,8 @@ namespace Brew_Stash
         private readonly string nearbyQuery = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={0},{1}&radius={2}&type={3}&keyword={4}&key=" + PlaceAPIkey;
         public string radius = "10000";
         public string typeSearch = "Cafe";
+        public static FinalOrder finalOrder;
+
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -35,9 +38,10 @@ namespace Brew_Stash
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.activity_main);
 
+            finalOrder = new FinalOrder();
+
             fusedLocationProviderClient = LocationServices.GetFusedLocationProviderClient(this);
             var location = fusedLocationProviderClient.GetLastLocationAsync();
-
 
             MapFragment mapFragment = (MapFragment)FragmentManager.FindFragmentById(Resource.Id.map);
             mapFragment.GetMapAsync(this);
@@ -75,7 +79,7 @@ namespace Brew_Stash
 
             var result = await NearByPlaceSearch(nearbyQuery, lat.ToString().Replace(",","."), lon.ToString().Replace(",","."), radius, typeSearch, typeSearch, "");
 
-            var listData = new ObservableCollection<Data.Result>();
+            var listData = new ObservableCollection<SearchData.Result>();
             if (result != null)
             {
                 foreach (var item in result)
@@ -87,16 +91,18 @@ namespace Brew_Stash
             map.InfoWindowClick += MapOnInfoWindowClick;
 
             AddLocationMarkers(map, listData);
+
+            
         }
 
 
-        public async Task<List<Data.Result>> NearByPlaceSearch(string googleQuery, string lat, string lng, string radius, string type, string keyword, string nextPageToken)
+        public async Task<List<SearchData.Result>> NearByPlaceSearch(string googleQuery, string lat, string lng, string radius, string type, string keyword, string nextPageToken)
         {
             pagetoken = nextPageToken != null ? "&pagetoken=" + nextPageToken : null;
             var requestUri = string.Format(googleQuery, lat, lng, radius, type, keyword) + pagetoken;
             try
             {
-                var restClient = new RestClient<Data.RootObject>();
+                var restClient = new RestClient<SearchData.RootObject>();
                 var result = await restClient.GetAsync(requestUri);
                 var tempResult = result.results;
                 pagetoken = result.next_page_token;
@@ -105,7 +111,7 @@ namespace Brew_Stash
                     while (pagetoken != null)
                     {
                         await System.Threading.Tasks.Task.Delay(2000);
-                        restClient = new RestClient<Data.RootObject>();
+                        restClient = new RestClient<SearchData.RootObject>();
                         result = await restClient.GetAsync(requestUri + pagetoken);
                         foreach (var item in result.results)
                         {
@@ -127,7 +133,7 @@ namespace Brew_Stash
             return null;
         }
 
-        public void AddLocationMarkers(GoogleMap map, ObservableCollection<Data.Result> list)
+        public void AddLocationMarkers(GoogleMap map, ObservableCollection<SearchData.Result> list)
         {
             foreach(var item in list)
             {
@@ -143,9 +149,26 @@ namespace Brew_Stash
             Marker myMarker = e.Marker;
             // Do something with marker.
             Console.WriteLine("Marker Clicked");
+            if (myMarker.Title != "My Position")
+            {
+                finalOrder.Cafe = myMarker.Title;
+                var intent = new Intent(this, typeof(CoffeeList));
+                this.StartActivity(intent);
+            }
+        }
 
-            var intent = new Intent(this, typeof(CoffeeList));
-            this.StartActivity(intent);
+        public static Database database;
+
+        public static Database Database
+        {
+            get
+            {
+                if (database == null)
+                {
+                    database = new Database(Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData), "Orders.db3"));
+                }
+                return database;
+            }
         }
     }
 }

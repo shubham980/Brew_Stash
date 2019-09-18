@@ -17,7 +17,7 @@ using static Android.Widget.AdapterView;
 
 namespace Brew_Stash
 {
-    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = false)]
+    [Activity(Label = "Add Required Details", Theme = "@style/AppTheme.NoActionBar", MainLauncher = false)]
     public class DetailsList : AppCompatActivity    {
 
        
@@ -30,12 +30,17 @@ namespace Brew_Stash
             Android.Widget.Button button = FindViewById<Android.Widget.Button>(Resource.Id.button2);
 
             button.Click += delegate {
+                UpdateOrder();
                 var intent = new Intent(this, typeof(PaymentList));
                 this.StartActivity(intent);
             };
-      
         }
         
-
+        private void UpdateOrder()
+        {
+            MainActivity.finalOrder.Name = FindViewById<EditText>(Resource.Id.detailsEditText1).Text;
+            MainActivity.finalOrder.ContactNumber = FindViewById<EditText>(Resource.Id.detailsEditText2).Text;
+            MainActivity.finalOrder.PickupTime = FindViewById<EditText>(Resource.Id.detailsEditText3).Text;
+        }
     }
 }
