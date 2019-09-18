@@ -3,4 +3,9 @@ BrewStash is an Xamarin food application mainly targeted for the public use. The
 
 
 WEEK 7 UPDATE:
+
 app setup+Introduced maps+ current location+anotations of the nearby cafes.
+
+WEEK 8 UPDATE:
+
+List of coffee + Cup size description + Add ons in coffee + User information input screen + UI for payment screen.
