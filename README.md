@@ -13,3 +13,7 @@ List of coffee + Cup size description + Add ons in coffee + User information inp
 WEEK 9 UPDATE:
 
 Database.cs + Added Database + Added Navigation + Added Splash Screen + Added pop-up menu on the addtional screen.
+
+WEEK 10.1 UPDATE:
+
+Layout changes(Added amount in the cupsList.cs, DetailsList.cs, FinalOrderScreen.cs, MainActivity.cs, PaymentList.cs) + Implementation in Database.cs , FinalOrder.cs, SearchData.cs
