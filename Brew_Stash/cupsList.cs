@@ -35,17 +35,20 @@ namespace Brew_Stash
             cupItems.Add(new Cup()
             {
                 Image = Resource.Drawable.smallCup,
-                Size = "Small"
+                Size = "Small",
+                Price = "5$"
             });
             cupItems.Add(new Cup()
             {
                 Image = Resource.Drawable.mediumCup,
-                Size = "Medium"
+                Size = "Medium",
+                Price = "7$"
             });
             cupItems.Add(new Cup()
             {
                 Image = Resource.Drawable.bigCup,
-                Size = "Large"
+                Size = "Large",
+                Price = "9$"
             });
 
             listView.Adapter = new CupListAdapter(this, cupItems);
@@ -65,6 +68,7 @@ namespace Brew_Stash
         {
             public string Size { get; set; }
             public int Image { get; set; }
+            public string Price { get; set; }
         }
 
         public class CupListAdapter : BaseAdapter<Cup>
@@ -98,6 +102,7 @@ namespace Brew_Stash
                     view = context.LayoutInflater.Inflate(Resource.Layout.cupsView, null);
                 view.FindViewById<TextView>(Resource.Id.textCup).Text = item.Size;
                 view.FindViewById<ImageView>(Resource.Id.imageCup).SetImageResource(item.Image);
+                view.FindViewById<TextView>(Resource.Id.textCupPrice).Text = item.Price;
 
                 return view;
             }

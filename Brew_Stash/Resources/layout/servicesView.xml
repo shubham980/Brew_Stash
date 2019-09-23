@@ -8,7 +8,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
-        android:text="Sugar"
+        android:text="Sugar (Free)"
         android:textAppearance="?android:attr/textAppearanceLarge"
     />
     <Spinner
@@ -21,7 +21,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
-        android:text="Full Cream Milk"
+        android:text="Full Cream Milk (1$)"
         android:textAppearance="?android:attr/textAppearanceLarge"
     />
     <Spinner
@@ -34,7 +34,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
-        android:text="Skim Milk"
+        android:text="Skim Milk (1.5$)"
         android:textAppearance="?android:attr/textAppearanceLarge"
     />
     <Spinner
@@ -47,7 +47,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
-        android:text="Whip Cream"
+        android:text="Whip Cream (2$)"
         android:textAppearance="?android:attr/textAppearanceLarge"
     />
     <Spinner
@@ -60,7 +60,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
-        android:text="Ice Cream"
+        android:text="Ice Cream (3$)"
         android:textAppearance="?android:attr/textAppearanceLarge"
     />
     <Spinner
@@ -73,7 +73,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
-        android:text="Marshmallow"
+        android:text="Marshmallow (3$)"
         android:textAppearance="?android:attr/textAppearanceLarge"
     />
     <Spinner

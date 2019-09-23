@@ -34,6 +34,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/detailsEditText3" />
+    <TextView
+        android:text="Choose Payment Method"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/detailsTextView4" />
+     <Spinner
+        android:id="@+id/spinnerPayment"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:prompt="@string/numbers_prompt"
+    />
     <Button
         android:text="Proceed to Payment"
         android:layout_width="match_parent"

@@ -15,7 +15,7 @@ using System.IO;
 
 namespace Brew_Stash
 {
-    [Activity(Label = "Choose Cafe", Theme = "@style/MyTheme.Splash", MainLauncher = true)]
+    [Activity(Label = "Brew Stash", Theme = "@style/MyTheme.Splash", MainLauncher = true)]
     public class MainActivity : AppCompatActivity, IOnMapReadyCallback
     {
         private static readonly string PlaceAPIkey = "AIzaSyChmYLvTZu0eb6iCj2JZ4gRkqlyNXnuTkw";
@@ -51,47 +51,53 @@ namespace Brew_Stash
 
         public async void OnMapReady(GoogleMap map)
         {
-            map.MapType = GoogleMap.MapTypeNormal;
-            map.UiSettings.ZoomControlsEnabled = true;
-            map.UiSettings.CompassEnabled = true;
-
-            var currentLocation = await fusedLocationProviderClient.GetLastLocationAsync();
-            lat = currentLocation.Latitude;
-            lon = currentLocation.Longitude;
-
-            LatLng location = new LatLng(lat, lon);
-
-            CameraPosition.Builder builder = CameraPosition.InvokeBuilder();
-            builder.Target(location);
-            builder.Zoom(16);
-            builder.Bearing(155);
-
-            CameraPosition cameraPosition = builder.Build();
-
-            CameraUpdate cameraUpdate = CameraUpdateFactory.NewCameraPosition(cameraPosition);
-
-            map.MoveCamera(cameraUpdate);
-
-            MarkerOptions markerOpt1 = new MarkerOptions();
-            markerOpt1.SetPosition(new LatLng(lat, lon));
-            markerOpt1.SetTitle("My Position");
-            map.AddMarker(markerOpt1);
-
-            var result = await NearByPlaceSearch(nearbyQuery, lat.ToString().Replace(",","."), lon.ToString().Replace(",","."), radius, typeSearch, typeSearch, "");
-
-            var listData = new ObservableCollection<SearchData.Result>();
-            if (result != null)
+            try
             {
-                foreach (var item in result)
+                map.MapType = GoogleMap.MapTypeNormal;
+                map.UiSettings.ZoomControlsEnabled = true;
+                map.UiSettings.CompassEnabled = true;
+
+                var currentLocation = await fusedLocationProviderClient.GetLastLocationAsync();
+                lat = currentLocation.Latitude;
+                lon = currentLocation.Longitude;
+
+                LatLng location = new LatLng(lat, lon);
+
+                CameraPosition.Builder builder = CameraPosition.InvokeBuilder();
+                builder.Target(location);
+                builder.Zoom(16);
+                builder.Bearing(155);
+
+                CameraPosition cameraPosition = builder.Build();
+
+                CameraUpdate cameraUpdate = CameraUpdateFactory.NewCameraPosition(cameraPosition);
+
+                map.MoveCamera(cameraUpdate);
+
+                MarkerOptions markerOpt1 = new MarkerOptions();
+                markerOpt1.SetPosition(new LatLng(lat, lon));
+                markerOpt1.SetTitle("My Position");
+                map.AddMarker(markerOpt1);
+
+                var result = await NearByPlaceSearch(nearbyQuery, lat.ToString().Replace(",", "."), lon.ToString().Replace(",", "."), radius, typeSearch, typeSearch, "");
+
+                var listData = new ObservableCollection<SearchData.Result>();
+                if (result != null)
                 {
-                    listData.Add(item);
+                    foreach (var item in result)
+                    {
+                        listData.Add(item);
+                    }
+                    System.Diagnostics.Debug.WriteLine("Total result: " + listData.Count);
                 }
-                System.Diagnostics.Debug.WriteLine("Total result: " + listData.Count);
+                map.InfoWindowClick += MapOnInfoWindowClick;
+
+                AddLocationMarkers(map, listData);
             }
-            map.InfoWindowClick += MapOnInfoWindowClick;
-
-            AddLocationMarkers(map, listData);
-
+            catch(Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
             
         }
 

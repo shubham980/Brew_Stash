@@ -20,6 +20,8 @@ namespace Brew_Stash
     [Activity(Label = "Add Required Details", Theme = "@style/AppTheme.NoActionBar", MainLauncher = false)]
     public class DetailsList : AppCompatActivity    {
 
+        private bool cashSelected = true;
+        private bool cardSelected = false;
        
         protected override void OnCreate(Bundle bundle)
         {
@@ -29,10 +31,27 @@ namespace Brew_Stash
 
             Android.Widget.Button button = FindViewById<Android.Widget.Button>(Resource.Id.button2);
 
+            Spinner spinner = FindViewById<Spinner>(Resource.Id.spinnerPayment);
+
+            spinner.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spinner_ItemSelected);
+            var adapter = ArrayAdapter.CreateFromResource(
+                    this, Resource.Array.payment_methods, Android.Resource.Layout.SimpleSpinnerItem);
+
+            adapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
+            spinner.Adapter = adapter;
+
             button.Click += delegate {
                 UpdateOrder();
-                var intent = new Intent(this, typeof(PaymentList));
-                this.StartActivity(intent);
+                if (cardSelected)
+                {
+                    var intent = new Intent(this, typeof(PaymentList));
+                    this.StartActivity(intent);
+                }
+                else
+                {
+                    var intent = new Intent(this, typeof(FinalOrderScreen));
+                    this.StartActivity(intent);
+                }
             };
         }
         
@@ -41,6 +60,22 @@ namespace Brew_Stash
             MainActivity.finalOrder.Name = FindViewById<EditText>(Resource.Id.detailsEditText1).Text;
             MainActivity.finalOrder.ContactNumber = FindViewById<EditText>(Resource.Id.detailsEditText2).Text;
             MainActivity.finalOrder.PickupTime = FindViewById<EditText>(Resource.Id.detailsEditText3).Text;
+        }
+
+        private void spinner_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
+        {
+            Spinner spinner = (Spinner)sender;
+            switch (e.Position)
+            {
+                case 0:
+                    cashSelected = true;
+                    cardSelected = false;
+                    break;
+                case 1:
+                    cashSelected = false;
+                    cardSelected = true;
+                    break;
+            }
         }
     }
 }

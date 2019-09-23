@@ -25,7 +25,7 @@ namespace Brew_Stash
         {
             base.OnCreate(bundle);
 
-            SetContentView(Resource.Layout.paymentView);
+            SetContentView(Resource.Layout.cardPaymentView);
 
             Android.Widget.Button button = FindViewById<Android.Widget.Button>(Resource.Id.button10);
 
@@ -33,6 +33,8 @@ namespace Brew_Stash
                 MainActivity.Database.SaveOrderAsync(MainActivity.finalOrder);
                 var note = MainActivity.Database.GetOrderAsync(0);
                 Console.WriteLine(MainActivity.finalOrder.ToString());
+                var intent = new Intent(this, typeof(FinalOrderScreen));
+                this.StartActivity(intent);
             };
       
         }
