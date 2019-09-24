@@ -17,3 +17,7 @@ Database.cs + Added Database + Added Navigation + Added Splash Screen + Added po
 WEEK 10.1 UPDATE:
 
 Layout changes(Added amount in the cupsList.cs, DetailsList.cs, FinalOrderScreen.cs, MainActivity.cs, PaymentList.cs) + Implementation in Database.cs , FinalOrder.cs, SearchData.cs
+
+10.2 Week Update:
+
+Cleaning of Code + Making UI fixes + Implementing Code on order screen + Fixing validation on user input screen.
