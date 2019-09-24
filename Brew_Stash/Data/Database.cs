@@ -20,6 +20,11 @@ namespace Brew_Stash
     {
         readonly SQLiteAsyncConnection _database;
 
+        /// <summary>
+        /// Creates a database instance
+        /// </summary>
+        /// <param name="dbPath"></param>
+
         public Database(string dbPath)
         {
             _database = new SQLiteAsyncConnection(dbPath);

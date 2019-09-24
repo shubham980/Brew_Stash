@@ -23,7 +23,10 @@ namespace Brew_Stash
         List<Cup> cupItems = new List<Cup>();
         Android.Widget.ListView listView;
 
-
+        /// <summary>
+        /// Creates a list of cups and populates screen with according data
+        /// </summary>
+        /// <param name="bundle"></param>
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -64,12 +67,20 @@ namespace Brew_Stash
 
         }
 
+        /// <summary>
+        /// Cup class
+        /// </summary>
+
         public class Cup
         {
             public string Size { get; set; }
             public int Image { get; set; }
             public string Price { get; set; }
         }
+
+        /// <summary>
+        /// Populates list with data
+        /// </summary>
 
         public class CupListAdapter : BaseAdapter<Cup>
         {

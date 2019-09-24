@@ -33,6 +33,8 @@ namespace Brew_Stash
 
             Spinner spinner = FindViewById<Spinner>(Resource.Id.spinnerPayment);
 
+            ///Populates dropdown list with data
+
             spinner.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spinner_ItemSelected);
             var adapter = ArrayAdapter.CreateFromResource(
                     this, Resource.Array.payment_methods, Android.Resource.Layout.SimpleSpinnerItem);
@@ -40,27 +42,42 @@ namespace Brew_Stash
             adapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
             spinner.Adapter = adapter;
 
+            /// Checks if all fields are valid and proceeds according to that
+
             button.Click += delegate {
-                UpdateOrder();
-                if (cardSelected)
+                if (ValidateFieldsNotEmpty() && ValidatePhoneNumber())
                 {
-                    var intent = new Intent(this, typeof(PaymentList));
-                    this.StartActivity(intent);
-                }
-                else
-                {
-                    var intent = new Intent(this, typeof(FinalOrderScreen));
-                    this.StartActivity(intent);
+                    UpdateOrder();
+                    if (cardSelected)
+                    {
+                        var intent = new Intent(this, typeof(PaymentList));
+                        this.StartActivity(intent);
+                    }
+                    else
+                    {
+                        var intent = new Intent(this, typeof(FinalOrderScreen));
+                        this.StartActivity(intent);
+                    }
                 }
             };
         }
         
+        /// <summary>
+        /// Updates final order with the user input
+        /// </summary>
+
         private void UpdateOrder()
         {
             MainActivity.finalOrder.Name = FindViewById<EditText>(Resource.Id.detailsEditText1).Text;
             MainActivity.finalOrder.ContactNumber = FindViewById<EditText>(Resource.Id.detailsEditText2).Text;
             MainActivity.finalOrder.PickupTime = FindViewById<EditText>(Resource.Id.detailsEditText3).Text;
         }
+
+        /// <summary>
+        /// Checks what payment option is selected
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 
         private void spinner_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
@@ -76,6 +93,45 @@ namespace Brew_Stash
                     cardSelected = true;
                     break;
             }
+        }
+
+        /// <summary>
+        /// Checks if fields arent empty
+        /// </summary>
+        /// <returns></returns>
+
+        private bool ValidateFieldsNotEmpty()
+        {
+            string Name = FindViewById<EditText>(Resource.Id.detailsEditText1).Text;
+            string ContactNumber = FindViewById<EditText>(Resource.Id.detailsEditText2).Text;
+            string PickupTime = FindViewById<EditText>(Resource.Id.detailsEditText3).Text;
+            if (Name != "" && ContactNumber != "" && PickupTime != "")
+            {
+                return true;
+            }
+            else
+            {
+                Toast.MakeText(this, "You need to complete all fields", ToastLength.Short).Show();
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Checks if phone number is made of less than 11 numbers
+        /// </summary>
+        /// <returns></returns>
+
+        private bool ValidatePhoneNumber()
+        {
+            string ContactNumber = FindViewById<EditText>(Resource.Id.detailsEditText2).Text;
+            var k = ContactNumber.ToCharArray();
+            if (k.Length > 11)
+            {
+                Toast.MakeText(this, "Contact Number not valid", ToastLength.Short).Show();
+                return false;
+            }
+            else
+                return true;
         }
     }
 }

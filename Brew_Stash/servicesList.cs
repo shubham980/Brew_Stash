@@ -20,12 +20,18 @@ namespace Brew_Stash
     [Activity(Label = "Choose Additional Services", Theme = "@style/AppTheme.NoActionBar", MainLauncher = false)]
     public class ServicesList : AppCompatActivity    {
 
-       
+       /// <summary>
+       /// Screen of additional services
+       /// </summary>
+       /// <param name="bundle"></param>
+
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 
             SetContentView(Resource.Layout.servicesView);
+
+            /// Populates dropdown lists with data
 
             for (int i = 1; i < 7; i++)
             {
@@ -74,12 +80,23 @@ namespace Brew_Stash
 
         }
         
+        /// <summary>
+        /// Reports whats selected
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 
         private void spinner_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
             Spinner spinner = (Spinner)sender;
             UpdateOrder(e.Position, spinner.Id);
         }
+
+        /// <summary>
+        /// Updates final order with selected data 
+        /// </summary>
+        /// <param name="count"></param>
+        /// <param name="id"></param>
 
         private void UpdateOrder(int count, int id)
         {

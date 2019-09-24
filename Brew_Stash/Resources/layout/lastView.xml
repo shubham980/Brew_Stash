@@ -29,5 +29,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/finalTime"
         android:padding="70px"/>
+    <Button
+        android:text="Return to main screen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonReturnMain"
+        android:layout_marginTop="0.0dp" />
 
 </LinearLayout>

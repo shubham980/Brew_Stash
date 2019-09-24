@@ -12,6 +12,12 @@ using System.Collections.ObjectModel;
 using Xamarin.Forms;
 using Android.Content;
 using System.IO;
+using Android.Runtime;
+using Android.Support.V4.App;
+using Android;
+using Android.Util;
+using Android.Support.Design.Widget;
+using Android.Widget;
 
 namespace Brew_Stash
 {
@@ -30,29 +36,48 @@ namespace Brew_Stash
         public string typeSearch = "Cafe";
         public static FinalOrder finalOrder;
 
-
-        protected override void OnCreate(Bundle savedInstanceState)
+        /// <summary>
+        /// Loads all of the needed elements
+        /// </summary>
+        /// <param name="savedInstanceState"></param>
+        protected async override void OnCreate(Bundle savedInstanceState)
         {
-            base.OnCreate(savedInstanceState);
-            Forms.Init(this, savedInstanceState);
-            Xamarin.Essentials.Platform.Init(this, savedInstanceState);
-            SetContentView(Resource.Layout.activity_main);
+            try
+            {
+                base.OnCreate(savedInstanceState);
 
-            finalOrder = new FinalOrder();
+                Forms.Init(this, savedInstanceState);
+                Xamarin.Essentials.Platform.Init(this, savedInstanceState);
 
-            fusedLocationProviderClient = LocationServices.GetFusedLocationProviderClient(this);
-            var location = fusedLocationProviderClient.GetLastLocationAsync();
+                SetContentView(Resource.Layout.activity_main);
 
-            MapFragment mapFragment = (MapFragment)FragmentManager.FindFragmentById(Resource.Id.map);
-            mapFragment.GetMapAsync(this);
+                finalOrder = new FinalOrder();
+
+                fusedLocationProviderClient = LocationServices.GetFusedLocationProviderClient(this);
+                var location = fusedLocationProviderClient.GetLastLocationAsync();
+
+                MapFragment mapFragment = (MapFragment)FragmentManager.FindFragmentById(Resource.Id.map);
+
+                mapFragment.GetMapAsync(this);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
             
         }
 
+        /// <summary>
+        /// When map is connected, gets current location, searches for nearest cafes and puts markers on the map
+        /// </summary>
+        /// <param name="map">our map</param>
 
         public async void OnMapReady(GoogleMap map)
         {
             try
             {
+                await TryToGetPermissions();
+
                 map.MapType = GoogleMap.MapTypeNormal;
                 map.UiSettings.ZoomControlsEnabled = true;
                 map.UiSettings.CompassEnabled = true;
@@ -101,6 +126,17 @@ namespace Brew_Stash
             
         }
 
+        /// <summary>
+        /// Requests neariest cafes data from Google Places API
+        /// </summary>
+        /// <param name="googleQuery"></param>
+        /// <param name="lat"></param>
+        /// <param name="lng"></param>
+        /// <param name="radius"></param>
+        /// <param name="type"></param>
+        /// <param name="keyword"></param>
+        /// <param name="nextPageToken"></param>
+        /// <returns></returns>
 
         public async Task<List<SearchData.Result>> NearByPlaceSearch(string googleQuery, string lat, string lng, string radius, string type, string keyword, string nextPageToken)
         {
@@ -139,6 +175,12 @@ namespace Brew_Stash
             return null;
         }
 
+        /// <summary>
+        /// Adds location markers on the map
+        /// </summary>
+        /// <param name="map">used map</param>
+        /// <param name="list">list of places</param>
+
         public void AddLocationMarkers(GoogleMap map, ObservableCollection<SearchData.Result> list)
         {
             foreach(var item in list)
@@ -149,6 +191,12 @@ namespace Brew_Stash
                 map.AddMarker(markerOpt1);
             }
         }
+
+        /// <summary>
+        /// When cafe name is clicked, takes to next page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 
         private async void MapOnInfoWindowClick(object sender, GoogleMap.InfoWindowClickEventArgs e)
         {
@@ -165,6 +213,10 @@ namespace Brew_Stash
 
         public static Database database;
 
+        /// <summary>
+        /// Starts a database
+        /// </summary>
+
         public static Database Database
         {
             get
@@ -176,6 +228,124 @@ namespace Brew_Stash
                 return database;
             }
         }
+
+
+        #region RuntimePermissions
+
+        /// <summary>
+        /// Checks SDK version and then looks for permissions
+        /// </summary>
+        /// <returns></returns>
+
+        async Task TryToGetPermissions()
+        {
+            if ((int)Build.VERSION.SdkInt >= 23)
+            {
+                await GetPermissionsAsync();
+                return;
+            }
+
+
+        }
+        const int RequestLocationId = 0;
+
+        /// <summary>
+        /// Needed permissions
+        /// </summary>
+
+        readonly string[] PermissionsGroupLocation =
+            {
+                            //TODO add more permissions
+                            Manifest.Permission.AccessCoarseLocation,
+                            Manifest.Permission.AccessFineLocation,
+             };
+
+        /// <summary>
+        /// Checks whether or not permissions are granted. Reports the result
+        /// </summary>
+        /// <returns></returns>
+
+        async Task GetPermissionsAsync()
+        {
+            const string permission = Manifest.Permission.AccessFineLocation;
+
+            if (CheckSelfPermission(permission) == (int)Android.Content.PM.Permission.Granted)
+            {
+                Toast.MakeText(this, "Location permissions granted", ToastLength.Short).Show();
+                return;
+            }
+
+            if (ShouldShowRequestPermissionRationale(permission))
+            {
+                await ShowDialog();
+
+                return;
+            }
+
+            RequestPermissions(PermissionsGroupLocation, RequestLocationId);
+
+        }
+
+        /// <summary>
+        /// Shows popup window which requests permissions to be granted
+        /// </summary>
+        /// <returns></returns>
+
+        private Task<bool> ShowDialog()
+        {
+            var tcs = new TaskCompletionSource<bool>();
+            //set alert for executing the task
+            Android.App.AlertDialog.Builder alert = new Android.App.AlertDialog.Builder(this);
+            alert.SetTitle("Permissions Needed");
+            alert.SetMessage("The application needs location permissions to continue");
+            alert.SetPositiveButton("Request Permissions", (senderAlert, args) =>
+            {
+                RequestPermissions(PermissionsGroupLocation, RequestLocationId);
+            });
+
+            alert.SetNegativeButton("Cancel", (senderAlert, args) =>
+            {
+                Toast.MakeText(this, "Cancelled!", ToastLength.Short).Show();
+                
+            });
+
+            Dialog dialog = alert.Create();
+            dialog.Show();
+            
+            return tcs.Task;
+        }
+
+        /// <summary>
+        /// When permissions result is received, reports what happened
+        /// </summary>
+        /// <param name="requestCode"></param>
+        /// <param name="permissions"></param>
+        /// <param name="grantResults"></param>
+
+        public override async void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
+        {
+            switch (requestCode)
+            {
+                case RequestLocationId:
+                    {
+                        if (grantResults[0] == (int)Android.Content.PM.Permission.Granted)
+                        {
+                            Toast.MakeText(this, "Location permissions granted", ToastLength.Short).Show();
+
+                        }
+                        else
+                        {
+                            //Permission Denied :(
+                            Toast.MakeText(this, "Location permissions denied", ToastLength.Short).Show();
+                        }
+                    }
+                    break;
+            }
+            //base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
+        #endregion
+
     }
 }
 

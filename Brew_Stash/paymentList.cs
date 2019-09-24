@@ -20,7 +20,11 @@ namespace Brew_Stash
     [Activity(Label = "Enter Credit Card Details", Theme = "@style/AppTheme.NoActionBar", MainLauncher = false)]
     public class PaymentList : AppCompatActivity    {
 
-       
+       /// <summary>
+       /// Shows card payment screen and writes to database after
+       /// </summary>
+       /// <param name="bundle"></param>
+       /// 
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);

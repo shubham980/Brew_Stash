@@ -16,7 +16,7 @@ namespace Brew_Stash
     public class FinalOrder
     {
         [PrimaryKey, AutoIncrement]
-        public int ID { get; set; }
+        public int ID { get; set; } // Database key
         public string Cafe { get; set; }
         public string CoffeeType { get; set; }
         public string CupSize { get; set; }
@@ -32,7 +32,7 @@ namespace Brew_Stash
         public string PaymentType { get; set; }
         public FinalOrder()
         {
-            Cafe = CoffeeType = CupSize = Name = ContactNumber = PickupTime = PaymentType = "Not Selected";
+            Cafe = CoffeeType = CupSize = Name = ContactNumber = PickupTime = PaymentType = "";
             SugarCount = FullCreamMilkCount = SkimMilkCount = WhipCreamCount = IceCreamCount = MarshmallowCount = 0;
         }
 

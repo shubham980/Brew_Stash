@@ -23,7 +23,10 @@ namespace Brew_Stash
         List<Coffee> coffeeItems = new List<Coffee>();
         Android.Widget.ListView listView;
 
-
+        /// <summary>
+        /// Creates list of coffees and populates screen with according information
+        /// </summary>
+        /// <param name="bundle"></param>
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -101,12 +104,20 @@ namespace Brew_Stash
 
         }
 
+        /// <summary>
+        /// Coffe object
+        /// </summary>
+
         public class Coffee
         {
             public string Description { get; set; }
             public string Name { get; set; }
             public int Image { get; set; }
         }
+
+        /// <summary>
+        /// Populates screen with data
+        /// </summary>
 
         public class CoffeeListAdapter : BaseAdapter<Coffee>
         {
