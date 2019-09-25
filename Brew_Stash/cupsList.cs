@@ -1,26 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Runtime;
 using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
-using Xamarin.Forms;
-using static Android.Resource;
+using System;
+using System.Collections.Generic;
 using static Android.Widget.AdapterView;
 
 namespace Brew_Stash
 {
     [Activity(Label = "Choose Cup Size", Theme = "@style/AppTheme.NoActionBar", MainLauncher = false)]
-    public class CupsList : AppCompatActivity    {
-
-        List<Cup> cupItems = new List<Cup>();
+    public class CupsList : AppCompatActivity
+    {
+        readonly List<Cup> cupItems = new List<Cup>();
         Android.Widget.ListView listView;
 
         /// <summary>
@@ -84,8 +77,8 @@ namespace Brew_Stash
 
         public class CupListAdapter : BaseAdapter<Cup>
         {
-            List<Cup> items;
-            Activity context;
+            readonly List<Cup> items;
+            readonly Activity context;
             public CupListAdapter(Activity context, List<Cup> items)
                 : base()
             {

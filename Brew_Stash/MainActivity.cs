@@ -1,36 +1,34 @@
-﻿using System;
+﻿using Android;
 using Android.App;
+using Android.Content;
+using Android.Gms.Location;
 using Android.Gms.Maps;
 using Android.Gms.Maps.Model;
 using Android.OS;
-using Android.Support.V7.App;
-using Android.Gms.Location;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using Brew_Stash.RestClient;
-using System.Collections.ObjectModel;
-using Xamarin.Forms;
-using Android.Content;
-using System.IO;
 using Android.Runtime;
 using Android.Support.V4.App;
-using Android;
-using Android.Util;
-using Android.Support.Design.Widget;
+using Android.Support.V7.App;
 using Android.Widget;
+using Brew_Stash.RestClient;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace Brew_Stash
 {
     [Activity(Label = "Brew Stash", Theme = "@style/MyTheme.Splash", MainLauncher = true)]
     public class MainActivity : AppCompatActivity, IOnMapReadyCallback
     {
-        private static readonly string PlaceAPIkey = "AIzaSyChmYLvTZu0eb6iCj2JZ4gRkqlyNXnuTkw";
+        private static readonly string PlaceAPIkey = "AIzaSyB5tx9q2SKIYQiz34LuxbpKOkbIKYpvFZU";
 
         private FusedLocationProviderClient fusedLocationProviderClient;
         double lat;
         double lon;
         public string pagetoken = "";
-        private string googleQuery = "https://maps.googleapis.com/maps/api/place/textsearch/json?query={0}+{1}&type={2}&language=it&key=" + PlaceAPIkey;
+        private readonly string googleQuery = "https://maps.googleapis.com/maps/api/place/textsearch/json?query={0}+{1}&type={2}&language=it&key=" + PlaceAPIkey;
         private readonly string nearbyQuery = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={0},{1}&radius={2}&type={3}&keyword={4}&key=" + PlaceAPIkey;
         public string radius = "10000";
         public string typeSearch = "Cafe";
@@ -40,7 +38,7 @@ namespace Brew_Stash
         /// Loads all of the needed elements
         /// </summary>
         /// <param name="savedInstanceState"></param>
-        protected async override void OnCreate(Bundle savedInstanceState)
+        protected override void OnCreate(Bundle savedInstanceState)
         {
             try
             {
@@ -60,11 +58,11 @@ namespace Brew_Stash
 
                 mapFragment.GetMapAsync(this);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
             }
-            
+
         }
 
         /// <summary>
@@ -76,7 +74,7 @@ namespace Brew_Stash
         {
             try
             {
-                await TryToGetPermissions();
+                TryToGetPermissions();
 
                 map.MapType = GoogleMap.MapTypeNormal;
                 map.UiSettings.ZoomControlsEnabled = true;
@@ -119,11 +117,11 @@ namespace Brew_Stash
 
                 AddLocationMarkers(map, listData);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
             }
-            
+
         }
 
         /// <summary>
@@ -183,7 +181,7 @@ namespace Brew_Stash
 
         public void AddLocationMarkers(GoogleMap map, ObservableCollection<SearchData.Result> list)
         {
-            foreach(var item in list)
+            foreach (var item in list)
             {
                 MarkerOptions markerOpt1 = new MarkerOptions();
                 markerOpt1.SetPosition(new LatLng(item.geometry.location.lat, item.geometry.location.lng));
@@ -306,12 +304,12 @@ namespace Brew_Stash
             alert.SetNegativeButton("Cancel", (senderAlert, args) =>
             {
                 Toast.MakeText(this, "Cancelled!", ToastLength.Short).Show();
-                
+
             });
 
             Dialog dialog = alert.Create();
             dialog.Show();
-            
+
             return tcs.Task;
         }
 

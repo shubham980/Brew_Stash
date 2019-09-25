@@ -1,26 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Runtime;
 using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
-using Xamarin.Forms;
-using static Android.Resource;
+using System.Collections.Generic;
 using static Android.Widget.AdapterView;
 
 namespace Brew_Stash
 {
     [Activity(Label = "Choose Coffee Type", Theme = "@style/AppTheme.NoActionBar", MainLauncher = false)]
-    public class CoffeeList : AppCompatActivity    {
-
-        List<Coffee> coffeeItems = new List<Coffee>();
+    public class CoffeeList : AppCompatActivity
+    {
+        readonly List<Coffee> coffeeItems = new List<Coffee>();
         Android.Widget.ListView listView;
 
         /// <summary>
@@ -121,8 +113,8 @@ namespace Brew_Stash
 
         public class CoffeeListAdapter : BaseAdapter<Coffee>
         {
-            List<Coffee> items;
-            Activity context;
+            readonly List<Coffee> items;
+            readonly Activity context;
             public CoffeeListAdapter(Activity context, List<Coffee> items)
                 : base()
             {

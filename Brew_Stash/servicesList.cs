@@ -1,29 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Runtime;
 using Android.Support.V7.App;
-using Android.Views;
 using Android.Widget;
-using Xamarin.Forms;
-using static Android.Resource;
-using static Android.Widget.AdapterView;
+using System;
 
 namespace Brew_Stash
 {
     [Activity(Label = "Choose Additional Services", Theme = "@style/AppTheme.NoActionBar", MainLauncher = false)]
-    public class ServicesList : AppCompatActivity    {
+    public class ServicesList : AppCompatActivity
+    {
 
-       /// <summary>
-       /// Screen of additional services
-       /// </summary>
-       /// <param name="bundle"></param>
+        /// <summary>
+        /// Screen of additional services
+        /// </summary>
+        /// <param name="bundle"></param>
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -59,7 +50,7 @@ namespace Brew_Stash
                         break;
 
                 }
-                
+
 
                 Spinner spinner = FindViewById<Spinner>(res);
 
@@ -73,13 +64,14 @@ namespace Brew_Stash
 
             Android.Widget.Button button = FindViewById<Android.Widget.Button>(Resource.Id.servicesButton);
 
-            button.Click += delegate {
+            button.Click += delegate
+            {
                 var intent = new Intent(this, typeof(DetailsList));
                 this.StartActivity(intent);
             };
 
         }
-        
+
         /// <summary>
         /// Reports whats selected
         /// </summary>

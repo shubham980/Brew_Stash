@@ -1,28 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Runtime;
 using Android.Support.V7.App;
-using Android.Views;
 using Android.Widget;
-using Xamarin.Forms;
-using static Android.Resource;
-using static Android.Widget.AdapterView;
+using System;
 
 namespace Brew_Stash
 {
     [Activity(Label = "Add Required Details", Theme = "@style/AppTheme.NoActionBar", MainLauncher = false)]
-    public class DetailsList : AppCompatActivity    {
+    public class DetailsList : AppCompatActivity
+    {
 
         private bool cashSelected = true;
         private bool cardSelected = false;
-       
+
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -44,7 +35,8 @@ namespace Brew_Stash
 
             /// Checks if all fields are valid and proceeds according to that
 
-            button.Click += delegate {
+            button.Click += delegate
+            {
                 if (ValidateFieldsNotEmpty() && ValidatePhoneNumber())
                 {
                     UpdateOrder();
@@ -61,7 +53,7 @@ namespace Brew_Stash
                 }
             };
         }
-        
+
         /// <summary>
         /// Updates final order with the user input
         /// </summary>
