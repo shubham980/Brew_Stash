@@ -18,6 +18,10 @@ WEEK 10.1 UPDATE:
 
 Layout changes(Added amount in the cupsList.cs, DetailsList.cs, FinalOrderScreen.cs, MainActivity.cs, PaymentList.cs) + Implementation in Database.cs , FinalOrder.cs, SearchData.cs
 
-10.2 Week Update:
+10.2 WEEK UPDTE:
 
 Cleaning of Code + Making UI fixes + Implementing Code on order screen + Fixing validation on user input screen.
+
+10.3 WEEK UPDATE:
+
+Show database content in console + Testing of the entie application.
